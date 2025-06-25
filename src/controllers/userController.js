@@ -68,8 +68,8 @@ const userController = {
           message: "Invalid credentials",
         });
       }
-        dotenv.config();
-        const JWT_SECRET = process.env.JWT_SECRET;
+      dotenv.config();
+      const JWT_SECRET = process.env.JWT_SECRET;
       const token = jwt.sign(
         {
           userId: user._id,
@@ -87,6 +87,44 @@ const userController = {
         message: "User logged in successfully",
         token,
       });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Internal server error",
+        error: error.message,
+      });
+    }
+  },
+  forgetPassword: async (req, res) => {
+    try {
+      const { phoneNumber, password } = req.body;
+      if (!phoneNumber) {
+        return res.status(400).json({
+          success: false,
+          message: "Please provide your phone number",
+        });
+      }
+      if (!password) {
+        return res.status(400).json({
+          success: false,
+          message: "Please provide your new password",
+        });
+      }
+      const user = await userModel.findOne({ phoneNumber });
+      if (!user) {
+        return res.status(400).json({
+          success: false,
+          message: "User with this phone number does not exist",
+        });
+      } else {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user.password = hashedPassword;
+        await user.save();
+        res.status(200).json({
+          success: true,
+          message: "Password updated successfully",
+        });
+      }
     } catch (error) {
       res.status(500).json({
         success: false,

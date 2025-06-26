@@ -15,7 +15,21 @@ const twilioValidator = {
             )
           ),
       });
-    } catch (error) {}
+        const { error } = sendOTPSchema.validate(req.body);
+        if (error) {
+          return res.status(400).json({
+            success: false,
+            message: error.details[0].message,
+          });
+        }
+    } catch (error) {
+        res.status(500).json({
+          success: false,
+          message: "Internal server error during validation",
+          error: error.message,
+        });
+    }
+    next();
   },
 };
 export default twilioValidator;

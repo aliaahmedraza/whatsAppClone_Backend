@@ -27,7 +27,8 @@ const twilioController = {
       });
       res
         .status(200)
-        .json({ success: true, message: "OTP sent successfully"});
+        .json({ success: true, message: "OTP sent successfully" });
+      console.log("OTP sent successfully");
     } catch (error) {
       console.error("Error sending OTP:", error);
       res.status(500).json({ success: false, message: "Failed to send OTP" });

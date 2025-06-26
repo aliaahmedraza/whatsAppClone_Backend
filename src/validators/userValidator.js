@@ -6,7 +6,7 @@ const userValidator = {
         firstName: Joi.string().required(),
         lastName: Joi.string().required(),
         phoneNumber: Joi.string()
-          .pattern(/^923(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9])\d{7}$/)
+          .pattern(/^923([0-4][0-9])\d{7}$/)
           .min(11)
           .max(13)
           .required(),
